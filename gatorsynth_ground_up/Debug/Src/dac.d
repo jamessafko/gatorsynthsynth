@@ -1,6 +1,9 @@
-Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_exti.o: \
- ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_exti.c \
- /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_exti.h \
+Src/dac.o: ../Src/dac.c \
+ /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Inc/dac.h \
+ /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
+ /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Inc/stm32f4xx_hal_conf.h \
+ /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Inc/main.h \
+ /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_crc.h \
  /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h \
  /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f429xx.h \
  /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/CMSIS/Include/core_cm4.h \
@@ -9,13 +12,10 @@ Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_exti.o: \
  /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/CMSIS/Include/core_cmFunc.h \
  /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/CMSIS/Include/core_cmSimd.h \
  /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h \
- /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
- /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Inc/stm32f4xx_hal_conf.h \
- /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Inc/main.h \
- /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_crc.h \
  /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_rcc.h \
  /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_bus.h \
  /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_system.h \
+ /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_exti.h \
  /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_cortex.h \
  /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_utils.h \
  /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_pwr.h \
@@ -31,6 +31,8 @@ Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_exti.o: \
  /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h \
  /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h \
  /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h \
+ /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dac.h \
+ /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dac_ex.h \
  /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h \
  /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h \
  /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h \
@@ -41,9 +43,18 @@ Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_exti.o: \
  /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_sd.h \
  /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_sdmmc.h \
  /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
- /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
+ /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
+ /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Inc/gpio.h
 
-/Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_exti.h:
+/Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Inc/dac.h:
+
+/Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
+
+/Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Inc/stm32f4xx_hal_conf.h:
+
+/Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Inc/main.h:
+
+/Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_crc.h:
 
 /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h:
 
@@ -61,19 +72,13 @@ Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_exti.o: \
 
 /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h:
 
-/Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
-
-/Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Inc/stm32f4xx_hal_conf.h:
-
-/Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Inc/main.h:
-
-/Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_crc.h:
-
 /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_rcc.h:
 
 /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_bus.h:
 
 /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_system.h:
+
+/Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_exti.h:
 
 /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_cortex.h:
 
@@ -105,6 +110,10 @@ Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_exti.o: \
 
 /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h:
 
+/Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dac.h:
+
+/Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dac_ex.h:
+
 /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h:
 
 /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h:
@@ -126,3 +135,5 @@ Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_exti.o: \
 /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h:
 
 /Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h:
+
+/Users/jamessafko/Documents/ST\ workspace/gatorsynth_ground_up/Inc/gpio.h:

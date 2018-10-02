@@ -73,6 +73,18 @@ void MX_SDIO_SD_Init(void);
 
 /* USER CODE BEGIN Prototypes */
 int sd_read_write_test();
+
+// used to describe a sound file
+struct SoundFile{
+	uint32_t size;
+	uint16_t numChannels;
+	uint16_t bitDepth;
+	uint32_t sampleRate;
+	char* name;
+};
+
+int sd_read_wav(struct SoundFile *sound, char name[]);
+
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

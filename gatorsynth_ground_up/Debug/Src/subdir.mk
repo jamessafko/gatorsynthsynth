@@ -6,6 +6,8 @@
 C_SRCS += \
 ../Src/bsp_driver_sd.c \
 ../Src/crc.c \
+../Src/dac.c \
+../Src/dma.c \
 ../Src/fatfs.c \
 ../Src/fmc.c \
 ../Src/gpio.c \
@@ -21,6 +23,8 @@ C_SRCS += \
 OBJS += \
 ./Src/bsp_driver_sd.o \
 ./Src/crc.o \
+./Src/dac.o \
+./Src/dma.o \
 ./Src/fatfs.o \
 ./Src/fmc.o \
 ./Src/gpio.o \
@@ -36,6 +40,8 @@ OBJS += \
 C_DEPS += \
 ./Src/bsp_driver_sd.d \
 ./Src/crc.d \
+./Src/dac.d \
+./Src/dma.d \
 ./Src/fatfs.d \
 ./Src/fmc.d \
 ./Src/gpio.d \
