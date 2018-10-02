@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright © 2017 STMicroelectronics International N.V. 
+  * <h2><center>&copy; Copyright ï¿½ 2017 STMicroelectronics International N.V. 
   * All rights reserved.</center></h2>
   *
   * Redistribution and use in source and binary forms, with or without 
@@ -69,7 +69,7 @@
 #undef  LCD_SWAP_XY
 #undef  LCD_MIRROR_Y
 
-#define LCD_SWAP_XY  1 
+#define LCD_SWAP_XY  1
 #define LCD_MIRROR_Y 1
 
 #define XSIZE_PHYS 240
@@ -84,7 +84,7 @@
 #define GUI_NUM_LAYERS 1
 
 #define COLOR_CONVERSION_0 GUICC_M8888I
-#define DISPLAY_DRIVER_0   GUIDRV_LIN_32
+#define DISPLAY_DRIVER_0   GUIDRV_LIN_OSY_32 // Change to rotate 90 degrees
 
 
 #if (GUI_NUM_LAYERS > 1)

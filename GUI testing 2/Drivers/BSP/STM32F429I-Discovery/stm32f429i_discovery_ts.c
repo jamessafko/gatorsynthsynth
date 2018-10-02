@@ -218,10 +218,10 @@ void BSP_TS_GetState(TS_StateTypeDef* TsState)
     }
     
     /* Update the X position */
-    TsState->X = _x;
+    TsState->X = _x; // flipped x and y
     
     /* Update the Y position */  
-    TsState->Y = _y;
+    TsState->Y = _y; //// flipped x and y
   }
 }
 

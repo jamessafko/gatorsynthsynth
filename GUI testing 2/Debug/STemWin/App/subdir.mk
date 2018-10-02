@@ -4,13 +4,16 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../STemWin/App/BASIC_HelloWorld.c 
+../STemWin/App/FramewinDLG.c \
+../STemWin/App/WindowDLG.c 
 
 OBJS += \
-./STemWin/App/BASIC_HelloWorld.o 
+./STemWin/App/FramewinDLG.o \
+./STemWin/App/WindowDLG.o 
 
 C_DEPS += \
-./STemWin/App/BASIC_HelloWorld.d 
+./STemWin/App/FramewinDLG.d \
+./STemWin/App/WindowDLG.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

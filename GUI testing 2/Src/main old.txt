@@ -53,7 +53,6 @@
 uint8_t GUI_Initialized = 0;
 TIM_HandleTypeDef TimHandle;
 uint32_t uwPrescalerValue = 0;
-int gui_ready = 0;
 
 /* Private function prototypes -----------------------------------------------*/
 static void BSP_Config(void);
@@ -82,20 +81,18 @@ int main(void)
   
   /* Initialize LCD and LEDs */
   BSP_Config();
-
+  
   /* Configure the system clock to 180 MHz */
   SystemClock_Config();
   
   /***********************************************************/
   
-  // 20 HZ clock for touch polling
-
    /* Compute the prescaler value to have TIM3 counter clock equal to 10 KHz */
   uwPrescalerValue = (uint32_t) ((SystemCoreClock /2) / 10000) - 1;
-
+  
   /* Set TIMx instance */
   TimHandle.Instance = TIM3;
-
+   
   /* Initialize TIM3 peripheral as follows:
        + Period = 500 - 1
        + Prescaler = ((SystemCoreClock/2)/10000) - 1
@@ -108,34 +105,30 @@ int main(void)
   TimHandle.Init.CounterMode = TIM_COUNTERMODE_UP;
   if(HAL_TIM_Base_Init(&TimHandle) != HAL_OK)
   {
-    while(1)
+    while(1) 
     {
     }
   }
-
+  
   /*##-2- Start the TIM Base generation in interrupt mode ####################*/
   /* Start Channel1 */
   if(HAL_TIM_Base_Start_IT(&TimHandle) != HAL_OK)
   {
-    while(1)
+    while(1) 
     {
     }
   }
-
+  
   /***********************************************************/
-
+  
   /* Init the STemWin GUI Library */
   GUI_Init();
   GUI_Initialized = 1;
   
   /* Activate the use of memory device feature */
   WM_SetCreateFlags(WM_CF_MEMDEV);
-
-  GUI_Clear();
-
-    WM_HWIN hWin = CreateFramewin();
-
-  //MainTask();
+  
+  MainTask();
 
   /* Infinite loop */  
   while (1) 
@@ -182,6 +175,10 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef *htim)
   */
 static void BSP_Config(void)
 {
+  /* Initialize STM32F429I-DISCO's LEDs */
+  BSP_LED_Init(LED3);
+  BSP_LED_Init(LED4);
+  
   /* Initializes the SDRAM device */
   BSP_SDRAM_Init();
   
@@ -199,11 +196,13 @@ static void BSP_Config(void)
   */ 
 void BSP_Background(void)
 {
+  BSP_LED_Toggle(LED3);
+  BSP_LED_Toggle(LED4);
+  
   /* Capture input event and update cursor */
   if(GUI_Initialized == 1)
   {
     BSP_Pointer_Update();
-    GUI_Exec();
   }
 }
 
@@ -222,12 +221,7 @@ void BSP_Pointer_Update(void)
   BSP_TS_GetState(&ts);
   
   TS_State.Pressed = ts.TouchDetected;
-
-  // Flip axis
-  uint16_t temp = ts.X;
-  ts.X = 320 - ts.Y; // flipped x and y
-  ts.Y = temp; // flipped x and y
-
+  
   xDiff = (prev_state.X > ts.X) ? (prev_state.X - ts.X) : (ts.X - prev_state.X);
   yDiff = (prev_state.Y > ts.Y) ? (prev_state.Y - ts.Y) : (ts.Y - prev_state.Y);
   
