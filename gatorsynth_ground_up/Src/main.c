@@ -50,6 +50,8 @@
 #include "main.h"
 #include "stm32f4xx_hal.h"
 #include "crc.h"
+#include "dac.h"
+#include "dma.h"
 #include "fatfs.h"
 #include "sdio.h"
 #include "tim.h"
@@ -107,12 +109,16 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_CRC_Init();
   MX_FMC_Init();
   MX_TIM1_Init();
   MX_SDIO_SD_Init();
   MX_FATFS_Init();
+  MX_DAC_Init();
+  MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
+
 	SDRAM_Initialization_Sequence();
 
 	// Check SDRAM setup (read and write)
@@ -124,6 +130,22 @@ int main(void)
 
 	// Check SD setup (read and write)
 	testttt = sd_read_write_test();
+	if(testttt != 0)
+	{
+		return -1;
+	}
+
+	// Timer start
+	TIM7->DIER |= 1; // enable interrupt
+	TIM7->CR1 |= 1; // enable timer
+
+	// DAC start
+	DAC->CR |= 1 << 16;// enable DAC
+
+	// Test reading .wav file
+	struct SoundFile testSound;
+	char name[] = "SAW_16.WAV\0";
+	testttt = sd_read_wav(&testSound, name);
 	if(testttt != 0)
 	{
 		return -1;

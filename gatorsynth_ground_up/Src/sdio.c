@@ -51,12 +51,17 @@
 #include "sdio.h"
 
 #include "gpio.h"
+#include "dma.h"
 
 /* USER CODE BEGIN 0 */
 #include "fatfs.h"
+#include "ff.h"
+#include <string.h>
 /* USER CODE END 0 */
 
 SD_HandleTypeDef hsd;
+DMA_HandleTypeDef hdma_sdio_rx;
+DMA_HandleTypeDef hdma_sdio_tx;
 
 /* SDIO init function */
 
@@ -71,7 +76,6 @@ void MX_SDIO_SD_Init(void)
   hsd.Init.HardwareFlowControl = SDIO_HARDWARE_FLOW_CONTROL_DISABLE;
   hsd.Init.ClockDiv = 3;
 
-  HAL_SD_Init(&hsd);
 }
 
 void HAL_SD_MspInit(SD_HandleTypeDef* sdHandle)
@@ -105,6 +109,49 @@ void HAL_SD_MspInit(SD_HandleTypeDef* sdHandle)
     GPIO_InitStruct.Alternate = GPIO_AF12_SDIO;
     HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
+    /* SDIO DMA Init */
+    /* SDIO_RX Init */
+    hdma_sdio_rx.Instance = DMA2_Stream3;
+    hdma_sdio_rx.Init.Channel = DMA_CHANNEL_4;
+    hdma_sdio_rx.Init.Direction = DMA_PERIPH_TO_MEMORY;
+    hdma_sdio_rx.Init.PeriphInc = DMA_PINC_DISABLE;
+    hdma_sdio_rx.Init.MemInc = DMA_MINC_ENABLE;
+    hdma_sdio_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
+    hdma_sdio_rx.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
+    hdma_sdio_rx.Init.Mode = DMA_PFCTRL;
+    hdma_sdio_rx.Init.Priority = DMA_PRIORITY_LOW;
+    hdma_sdio_rx.Init.FIFOMode = DMA_FIFOMODE_ENABLE;
+    hdma_sdio_rx.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_FULL;
+    hdma_sdio_rx.Init.MemBurst = DMA_MBURST_INC4;
+    hdma_sdio_rx.Init.PeriphBurst = DMA_PBURST_INC4;
+    if (HAL_DMA_Init(&hdma_sdio_rx) != HAL_OK)
+    {
+      _Error_Handler(__FILE__, __LINE__);
+    }
+
+    __HAL_LINKDMA(sdHandle,hdmarx,hdma_sdio_rx);
+
+    /* SDIO_TX Init */
+    hdma_sdio_tx.Instance = DMA2_Stream6;
+    hdma_sdio_tx.Init.Channel = DMA_CHANNEL_4;
+    hdma_sdio_tx.Init.Direction = DMA_MEMORY_TO_PERIPH;
+    hdma_sdio_tx.Init.PeriphInc = DMA_PINC_DISABLE;
+    hdma_sdio_tx.Init.MemInc = DMA_MINC_ENABLE;
+    hdma_sdio_tx.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
+    hdma_sdio_tx.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
+    hdma_sdio_tx.Init.Mode = DMA_PFCTRL;
+    hdma_sdio_tx.Init.Priority = DMA_PRIORITY_LOW;
+    hdma_sdio_tx.Init.FIFOMode = DMA_FIFOMODE_ENABLE;
+    hdma_sdio_tx.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_FULL;
+    hdma_sdio_tx.Init.MemBurst = DMA_MBURST_INC4;
+    hdma_sdio_tx.Init.PeriphBurst = DMA_PBURST_INC4;
+    if (HAL_DMA_Init(&hdma_sdio_tx) != HAL_OK)
+    {
+      _Error_Handler(__FILE__, __LINE__);
+    }
+
+    __HAL_LINKDMA(sdHandle,hdmatx,hdma_sdio_tx);
+
     /* SDIO interrupt Init */
     HAL_NVIC_SetPriority(SDIO_IRQn, 0, 0);
     HAL_NVIC_EnableIRQ(SDIO_IRQn);
@@ -134,6 +181,10 @@ void HAL_SD_MspDeInit(SD_HandleTypeDef* sdHandle)
 
     HAL_GPIO_DeInit(GPIOD, GPIO_PIN_2);
 
+    /* SDIO DMA DeInit */
+    HAL_DMA_DeInit(sdHandle->hdmarx);
+    HAL_DMA_DeInit(sdHandle->hdmatx);
+
     /* SDIO interrupt Deinit */
     HAL_NVIC_DisableIRQ(SDIO_IRQn);
   /* USER CODE BEGIN SDIO_MspDeInit 1 */
@@ -143,30 +194,63 @@ void HAL_SD_MspDeInit(SD_HandleTypeDef* sdHandle)
 } 
 
 /* USER CODE BEGIN 1 */
+void WORKING_MX_SDIO_SD_Init(void)
+{
+
+  hsd.Instance = SDIO;
+  hsd.Init.ClockEdge = SDIO_CLOCK_EDGE_RISING;
+  hsd.Init.ClockBypass = SDIO_CLOCK_BYPASS_DISABLE;
+  hsd.Init.ClockPowerSave = SDIO_CLOCK_POWER_SAVE_DISABLE;
+  hsd.Init.BusWide = SDIO_BUS_WIDE_1B;
+  hsd.Init.HardwareFlowControl = SDIO_HARDWARE_FLOW_CONTROL_DISABLE;
+  hsd.Init.ClockDiv = 3;
+
+  HAL_SD_Init(&hsd);
+}
+
+UINT bytesRead;
+UINT bytesWritten;
+FATFS myFATFS;
+FIL myFile; // file pointer
+
 int sd_read_write_test()
 {
 	uint8_t failed = 0;
-
+	FRESULT check = FR_OK;
 	//mount SD card
-	UINT bytesRead;
-	UINT bytesWritten;
-	FATFS myFATFS;
-	FIL myFile; // file pointer
-	if(f_mount(&myFATFS, (TCHAR const*)SDPath, 1) == FR_OK) // 1 = connect
+
+	check = f_mount(&myFATFS, (TCHAR const*)SDPath, 1);
+	if(check == FR_OK) // 1 = connect
 	{
-		char myPath[] = "TEST.TXT\0"; // user upper case and terminate with this char
+		// LIMITED TO 8 CHARACTER FILE NAMES???
+		char myPath[] = "UNTITE.TXT\0"; // user upper case and terminate with this char
+		char myData[] = "Hello, world!!!";
 
 		//Create and open this file
-		f_open(&myFile, myPath, FA_WRITE | FA_CREATE_ALWAYS);
-		char myData[] = "Hello, world\0";
-		f_write(&myFile, myData, sizeof(myData), &bytesWritten);
-		f_close(&myFile);
+		check = f_open(&myFile, myPath, FA_WRITE | FA_CREATE_ALWAYS);
+		if(check != FR_OK)
+			return 1;
+
+
+		check = f_write(&myFile, myData, sizeof(myData), &bytesWritten);
+		if(check != FR_OK)
+			return 2;
+
+		check = f_close(&myFile);
+		if(check != FR_OK)
+			return 3;
 
 		//Create and open this file
-		f_open(&myFile, myPath, FA_READ | FA_OPEN_ALWAYS);
+		check = f_open(&myFile, myPath, FA_READ | FA_OPEN_ALWAYS);
+		if(check != FR_OK)
+			return 4;
 		char testData[sizeof(myData)];
-		f_read(&myFile, testData, sizeof(testData), &bytesRead);
-		f_close(&myFile);
+		check = f_read(&myFile, testData, sizeof(testData), &bytesRead);
+		if(check != FR_OK)
+			return 5;
+		check = f_close(&myFile);
+		if(check != FR_OK)
+			return 6;
 
 		for(int i = 0; i < sizeof(testData); i++)
 		{
@@ -175,6 +259,109 @@ int sd_read_write_test()
 				failed++;
 			}
 		}
+	}
+	else
+	{
+		return -1;
+	}
+	return failed;
+}
+
+// This function adapted from ChaN, the creator of the FatFs library
+int sd_read_wav(struct SoundFile *sound, char name[])
+{
+	uint8_t wav_buff[128];
+	FRESULT check = FR_OK;
+
+	for(unsigned int i = 0; i < 128; i++)
+	{
+		wav_buff[i] = 0;
+	}
+
+	if(f_mount(&myFATFS, (TCHAR const*)SDPath, 1) == FR_OK) // 1 = connect
+	{
+		//Create and open this file
+		check = f_open(&myFile, name, FA_READ | FA_OPEN_ALWAYS);
+		if(check != FR_OK)
+			return 1;
+
+
+		/**********	READ RIFF HEADER *********/
+		char chunk[16];
+		check = f_read(&myFile, &chunk, 12, &bytesRead);
+		if(check != FR_OK)
+			return 2;
+		// Check chunk
+		if( !(chunk[0] == 'R' &&
+			chunk[1] == 'I' &&
+			chunk[2] == 'F' &&
+			chunk[3] == 'F' &&
+			chunk[8] == 'W' &&
+			chunk[9] == 'A' &&
+			chunk[10] == 'V' &&
+			chunk[11] == 'E'))
+			return 3;
+
+		/**********	READ FMT HEADER *********/
+		check = f_read(&myFile, &chunk, 4, &bytesRead);
+		if(check != FR_OK)
+			return 2;
+		if( !(chunk[0] == 'f' && //fmt??
+			chunk[1] == 'm' &&
+			chunk[2] == 't'))
+			return 4;
+		check = f_read(&myFile, &chunk, 4, &bytesRead);
+		if(check != FR_OK)
+			return 5;
+		if( !(chunk[0] == 0x10 && //Subchunk1Size == 16 == PCM???
+			chunk[1] == 0x00 &&
+			chunk[2] == 0x00 &&
+			chunk[2] == 0x00))
+			return 6;
+
+		// Parse file information
+		check = f_read(&myFile, &chunk, 16, &bytesRead);
+		if(check != FR_OK)
+			return 7;
+		if( !(chunk[0] == 0x01 && //AudioFormat == 1 == PCM???
+			chunk[1] == 0x00))
+			return 8;
+		if( !(chunk[2] == 0x01 && //NumChannels == 1 == mono???
+			chunk[3] == 0x00))
+			return 8;
+		sound->numChannels = (chunk[3] << 8) | chunk[2];
+		if( !(chunk[4] == 0x44 && //SampleRate == 44.1kHz???***************
+			chunk[5] == 0xAC &&
+			chunk[6] == 0x00 &&
+			chunk[7] == 0x00))
+			return 10;
+		sound->sampleRate = (chunk[7] << 24) | (chunk[6] << 16) | (chunk[5] << 8) | chunk[4];
+		if( !(chunk[14] == 16 && //bit depth == 16 bits???***************
+			chunk[15] == 00))
+			return 10;
+		sound->bitDepth = (chunk[15] << 8) | chunk[14];
+
+
+		// DATA CHUNK
+		check = f_read(&myFile, &chunk[0], 4, &bytesRead);
+		if( !(chunk[0] == 'd' && // Subchunk2ID == 'data'??????
+			chunk[1] == 'a' &&
+			chunk[2] == 't' &&
+			chunk[3] == 'a'))
+			return 11;
+		check = f_read(&myFile, &chunk[0], 4, &bytesRead); // numsamples * num channels * bitdepth / 8
+		sound->size = 8 * ((chunk[3] << 24) | (chunk[2] << 16) | (chunk[1] << 8) | chunk[0] ) /
+						(sound->numChannels * sound->bitDepth);
+
+		// Read in data
+
+
+		// Data parsing
+		/*
+		int8_t a[2];
+		int16_t b;
+		memcpy(&b, a, sizeof(a));
+		*/
 	}
 	return 0;
 }
