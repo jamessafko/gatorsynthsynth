@@ -1,4 +1,5 @@
 Src/menu1DLG.o: ../Src/menu1DLG.c \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Inc/menu2DLG.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/DIALOG.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/WM.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/GUI_ConfDefaults.h \
@@ -43,6 +44,8 @@ Src/menu1DLG.o: ../Src/menu1DLG.c \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/TEXT.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/TREEVIEW.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/KNOB.h
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Inc/menu2DLG.h:
 
 /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/DIALOG.h:
 

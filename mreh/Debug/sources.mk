@@ -21,6 +21,8 @@ Drivers/BSP/Components/stmpe811 \
 Drivers/BSP/STM32F429I-Discovery \
 Drivers/STM32F4xx_HAL_Driver/Src \
 Middlewares/ST2/STemWin/OS \
+Middlewares/Third_Party/FatFs/src \
+Middlewares/Third_Party/FatFs/src/option \
 Src \
 startup \
 

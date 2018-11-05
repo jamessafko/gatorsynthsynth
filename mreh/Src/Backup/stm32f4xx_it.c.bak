@@ -42,11 +42,13 @@
 #include "stm32f4xx_hal_i2c.h"
 extern uint8_t GUI_Initialized;
 extern SAI_HandleTypeDef hsai_BlockA1;
-uint16_t buff[1] = {0};
+extern int16_t dac_buff_test[256];
+int32_t dac_buff_test_index = 0;
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
 extern I2C_HandleTypeDef hi2c3;
+extern DMA_HandleTypeDef hdma_sai1_a;
 extern TIM_HandleTypeDef htim3;
 extern TIM_HandleTypeDef htim7;
 
@@ -55,6 +57,78 @@ extern TIM_HandleTypeDef htim6;
 /******************************************************************************/
 /*            Cortex-M4 Processor Interruption and Exception Handlers         */ 
 /******************************************************************************/
+
+/**
+* @brief This function handles Hard fault interrupt.
+*/
+void HardFault_Handler(void)
+{
+  /* USER CODE BEGIN HardFault_IRQn 0 */
+
+  /* USER CODE END HardFault_IRQn 0 */
+  while (1)
+  {
+    /* USER CODE BEGIN W1_HardFault_IRQn 0 */
+    /* USER CODE END W1_HardFault_IRQn 0 */
+  }
+  /* USER CODE BEGIN HardFault_IRQn 1 */
+
+  /* USER CODE END HardFault_IRQn 1 */
+}
+
+/**
+* @brief This function handles Memory management fault.
+*/
+void MemManage_Handler(void)
+{
+  /* USER CODE BEGIN MemoryManagement_IRQn 0 */
+
+  /* USER CODE END MemoryManagement_IRQn 0 */
+  while (1)
+  {
+    /* USER CODE BEGIN W1_MemoryManagement_IRQn 0 */
+    /* USER CODE END W1_MemoryManagement_IRQn 0 */
+  }
+  /* USER CODE BEGIN MemoryManagement_IRQn 1 */
+
+  /* USER CODE END MemoryManagement_IRQn 1 */
+}
+
+/**
+* @brief This function handles Pre-fetch fault, memory access fault.
+*/
+void BusFault_Handler(void)
+{
+  /* USER CODE BEGIN BusFault_IRQn 0 */
+
+  /* USER CODE END BusFault_IRQn 0 */
+  while (1)
+  {
+    /* USER CODE BEGIN W1_BusFault_IRQn 0 */
+    /* USER CODE END W1_BusFault_IRQn 0 */
+  }
+  /* USER CODE BEGIN BusFault_IRQn 1 */
+
+  /* USER CODE END BusFault_IRQn 1 */
+}
+
+/**
+* @brief This function handles Undefined instruction or illegal state.
+*/
+void UsageFault_Handler(void)
+{
+  /* USER CODE BEGIN UsageFault_IRQn 0 */
+
+  /* USER CODE END UsageFault_IRQn 0 */
+  while (1)
+  {
+    /* USER CODE BEGIN W1_UsageFault_IRQn 0 */
+    /* USER CODE END W1_UsageFault_IRQn 0 */
+  }
+  /* USER CODE BEGIN UsageFault_IRQn 1 */
+
+  /* USER CODE END UsageFault_IRQn 1 */
+}
 
 /**
 * @brief This function handles System service call via SWI instruction.
@@ -67,6 +141,19 @@ void SVC_Handler(void)
   /* USER CODE BEGIN SVCall_IRQn 1 */
 
   /* USER CODE END SVCall_IRQn 1 */
+}
+
+/**
+* @brief This function handles Debug monitor.
+*/
+void DebugMon_Handler(void)
+{
+  /* USER CODE BEGIN DebugMonitor_IRQn 0 */
+
+  /* USER CODE END DebugMonitor_IRQn 0 */
+  /* USER CODE BEGIN DebugMonitor_IRQn 1 */
+
+  /* USER CODE END DebugMonitor_IRQn 1 */
 }
 
 /**
@@ -109,52 +196,12 @@ void SysTick_Handler(void)
 void TIM3_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM3_IRQn 0 */
-	/* Capture input event and update cursor */
-	  if(GUI_Initialized == 1)
-	  {
-		  GUI_PID_STATE TS_State;
-		static TS_StateTypeDef prev_state;
-		TS_StateTypeDef  ts;
-		uint16_t xDiff, yDiff;
 
-		BSP_TS_GetState(&ts);
-
-		TS_State.Pressed = ts.TouchDetected;
-
-		// Flip axis
-		uint16_t temp = ts.X;
-		ts.X = 320 - ts.Y; // flipped x and y
-		ts.Y = temp; // flipped x and y
-
-		xDiff = (prev_state.X > ts.X) ? (prev_state.X - ts.X) : (ts.X - prev_state.X);
-		yDiff = (prev_state.Y > ts.Y) ? (prev_state.Y - ts.Y) : (ts.Y - prev_state.Y);
-
-		if(ts.TouchDetected)
-		{
-		  if((prev_state.TouchDetected != ts.TouchDetected )||
-			 (xDiff > 3 )||
-			   (yDiff > 3))
-		  {
-			prev_state = ts;
-
-			TS_State.Layer = 0;
-			TS_State.x = ts.X;
-			TS_State.y = ts.Y;
-
-			GUI_TOUCH_StoreStateEx(&TS_State);
-		  }
-		}
-		if(!ts.TouchDetected && prev_state.TouchDetected != ts.TouchDetected)
-		{
-		  GUI_TOUCH_StoreStateEx(&TS_State);
-		}
-
-	  }
 	  //GUI_update();
   /* USER CODE END TIM3_IRQn 0 */
   HAL_TIM_IRQHandler(&htim3);
   /* USER CODE BEGIN TIM3_IRQn 1 */
-  TIM7->SR &= 0b11111110; // clear interrupt
+  //TIM7->SR &= 0b11111110; // clear interrupt
   /* USER CODE END TIM3_IRQn 1 */
 }
 
@@ -179,19 +226,33 @@ void TIM7_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM7_IRQn 0 */
 
-
+	HAL_GPIO_TogglePin(GPIOF, GPIO_PIN_6);
 
 	//HAL_SAI_Transmit(&hsai_BlockA1, buff, 2, 10);
-	hsai_BlockA1.Instance->DR = buff[0];
+	hsai_BlockA1.Instance->DR = dac_buff_test[dac_buff_test_index];
 
-		  buff[0] = buff[0] + 1;
-		 if(buff[0] == 65535)
-			  buff[0] = 0;
+	dac_buff_test_index++;
+		 if(dac_buff_test_index >= 256)
+			 dac_buff_test_index = 0;
   /* USER CODE END TIM7_IRQn 0 */
   HAL_TIM_IRQHandler(&htim7);
   /* USER CODE BEGIN TIM7_IRQn 1 */
   TIM7->SR &= 0b11111110; // clear interrupt
   /* USER CODE END TIM7_IRQn 1 */
+}
+
+/**
+* @brief This function handles DMA2 stream3 global interrupt.
+*/
+void DMA2_Stream3_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA2_Stream3_IRQn 0 */
+
+  /* USER CODE END DMA2_Stream3_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_sai1_a);
+  /* USER CODE BEGIN DMA2_Stream3_IRQn 1 */
+
+  /* USER CODE END DMA2_Stream3_IRQn 1 */
 }
 
 /**
@@ -219,7 +280,7 @@ void I2C3_ER_IRQHandler(void)
 	if(((READ_REG(hi2c3.Instance->SR1) & I2C_FLAG_ARLO) != RESET) && ((READ_REG(hi2c3.Instance->CR2) & I2C_IT_ERR) != RESET))
   {
 		//I2C3_ClearBusyFlagErratum(&I2cHandle);
-		I2Cx_Error();
+		//I2Cx_Error();
   }
   /* USER CODE END I2C3_ER_IRQn 0 */
   HAL_I2C_ER_IRQHandler(&hi2c3);

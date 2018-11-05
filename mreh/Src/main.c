@@ -4,46 +4,60 @@
   * @file           : main.c
   * @brief          : Main program body
   ******************************************************************************
-  ** This notice applies to any and all portions of this file
+  * This notice applies to any and all portions of this file
   * that are not between comment pairs USER CODE BEGIN and
   * USER CODE END. Other portions of this file, whether 
   * inserted by the user or by software development tools
   * are owned by their respective copyright owners.
   *
-  * COPYRIGHT(c) 2018 STMicroelectronics
+  * Copyright (c) 2018 STMicroelectronics International N.V. 
+  * All rights reserved.
   *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
+  * Redistribution and use in source and binary forms, with or without 
+  * modification, are permitted, provided that the following conditions are met:
   *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  * 1. Redistribution of source code must retain the above copyright notice, 
+  *    this list of conditions and the following disclaimer.
+  * 2. Redistributions in binary form must reproduce the above copyright notice,
+  *    this list of conditions and the following disclaimer in the documentation
+  *    and/or other materials provided with the distribution.
+  * 3. Neither the name of STMicroelectronics nor the names of other 
+  *    contributors to this software may be used to endorse or promote products 
+  *    derived from this software without specific written permission.
+  * 4. This software, including modifications and/or derivative works of this 
+  *    software, must execute solely and exclusively on microcontroller or
+  *    microprocessor devices manufactured by or for STMicroelectronics.
+  * 5. Redistribution and use of this software other than as permitted under 
+  *    this license is void and will automatically terminate your rights under 
+  *    this license. 
+  *
+  * THIS SOFTWARE IS PROVIDED BY STMICROELECTRONICS AND CONTRIBUTORS "AS IS" 
+  * AND ANY EXPRESS, IMPLIED OR STATUTORY WARRANTIES, INCLUDING, BUT NOT 
+  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
+  * PARTICULAR PURPOSE AND NON-INFRINGEMENT OF THIRD PARTY INTELLECTUAL PROPERTY
+  * RIGHTS ARE DISCLAIMED TO THE FULLEST EXTENT PERMITTED BY LAW. IN NO EVENT 
+  * SHALL STMICROELECTRONICS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+  * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+  * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+  * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF 
+  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING 
+  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   *
   ******************************************************************************
   */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32f4xx_hal.h"
+#include "adc.h"
 #include "crc.h"
+#include "dma.h"
 #include "dma2d.h"
+#include "fatfs.h"
 #include "i2c.h"
 #include "ltdc.h"
 #include "sai.h"
+#include "sdio.h"
 #include "spi.h"
 #include "tim.h"
 #include "usart.h"
@@ -58,11 +72,15 @@
 #include "stm32f429i_discovery_ts.h"
 #include "stm32f429i_discovery_sdram.h"
 #include "../Components/ili93412/ili9341.h"
+#include "menu1DLG.h"
+#include "menu2DLG.h"
+#include <math.h>
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+int16_t dac_buff_test[256] = {0};
 uint8_t GUI_Initialized = 0;
 TIM_HandleTypeDef TimHandle;
 TIM_HandleTypeDef TimHandle3;
@@ -115,27 +133,86 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_CRC_Init();
   MX_TIM1_Init();
-  MX_USART1_UART_Init();
   MX_SAI1_Init();
   MX_TIM7_Init();
   MX_TIM3_Init();
+  MX_SDIO_SD_Init();
+  MX_ADC1_Init();
+  MX_USART1_UART_Init();
+  MX_DMA2D_Init();
+  MX_FMC_Init();
+  MX_LTDC_Init();
+  MX_FATFS_Init();
   /* USER CODE BEGIN 2 */
 
 
 
   // SAI setup
-  HAL_SAI_InitProtocol(&hsai_BlockA1, SAI_I2S_STANDARD, 16, 2);
+  //HAL_SAI_InitProtocol(&hsai_BlockA1, SAI_I2S_STANDARD, 16, 2);
+  //Turn off all GPIOs to start
+  GPIO_InitTypeDef GPIO_InitStruct;
+  GPIO_InitStruct.Pin = GPIO_PIN_2|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Alternate = GPIO_AF6_SAI1;
+  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+
   hsai_BlockA1.Instance->CR1 |= 1<<16; // enable
   hsai_BlockA1.Instance->CR1 |= 1<<13; // enable output drive
   hsai_BlockA1.Instance->CR1 |= 1<<12; // enable mono mode
-  uint16_t buff[1] = {0};
+  for(int i = 0; i < 256; i++)
+  {
+	  //dac_buff_test[i] = (int16_t)(32767.0*sin(2.0 * M_PI * i / 256.0));
+	  dac_buff_test[i] = (int16_t)((((float)i - 128.0)/128.0) * 32767.0);
+  }
 
   // Timer start
-  //TIM7->CR1 |= 1 << 2; // update only on overflow/underflow
-	TIM7->DIER |= 1; // enable interrupt
-	TIM7->CR1 |= 1; // enable timer
+  //       no TIM7->CR1 |= 1 << 2; // update only on overflow/underflow
+	//TIM7->DIER |= 1; // enable interrupt
+	//TIM7->CR1 |= 1; // enable timer
+
+	// Turn on mclk
+	      GPIO_InitStruct.Pin = GPIO_PIN_2;
+	      GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+	      GPIO_InitStruct.Pull = GPIO_NOPULL;
+	      GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	      GPIO_InitStruct.Alternate = GPIO_AF6_SAI1;
+	      HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+	      HAL_Delay(20);
+
+	      // Turn on LRCLK
+	          GPIO_InitStruct.Pin = GPIO_PIN_4;
+	          GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+	          GPIO_InitStruct.Pull = GPIO_NOPULL;
+	          GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	          GPIO_InitStruct.Alternate = GPIO_AF6_SAI1;
+	          HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+	          HAL_Delay(20);
+
+	  	// Turn on SCLK
+	  			GPIO_InitStruct.Pin = GPIO_PIN_5;
+	  			GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+	  			GPIO_InitStruct.Pull = GPIO_NOPULL;
+	  			GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	  			GPIO_InitStruct.Alternate = GPIO_AF6_SAI1;
+	  			HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+	  			HAL_Delay(20);
+
+	  	// Turn on Data
+	  			GPIO_InitStruct.Pin = GPIO_PIN_6;
+	  			GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+	  			GPIO_InitStruct.Pull = GPIO_NOPULL;
+	  			GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	  			GPIO_InitStruct.Alternate = GPIO_AF6_SAI1;
+	  			HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+	  			HAL_Delay(20);
+
+	HAL_SAI_Transmit_DMA(&hsai_BlockA1, dac_buff_test, 256/2); // number of samples / number bytes per sample
+
 
 	GPIOF->ODR &= 0b11111111111111111111111110111111; // F6?
 	  	HAL_Delay(10);
@@ -148,6 +225,12 @@ int main(void)
   	BSP_SDRAM_Init();
 
   	volatile int test2 = SDRAM_read_write_test();
+
+  	test2 = sd_read_write_test();
+	if(test2 != 0)
+	{
+		//return -1;
+	}
 
   	/* Initialize the Touch screen */
   	BSP_TS_Init(240, 320);
@@ -162,8 +245,8 @@ int main(void)
 
 
 	  volatile HAL_StatusTypeDef test;
-	  test = test_i2c_connection(); // test i2c
-	  test = write_to_codec(0, 1, 1<<7); // SW reset
+	  //test = test_i2c_connection(); // test i2c
+	  //test = write_to_codec(0, 1, 1<<7); // SW reset
 
 
   	  /***********************************************************/
@@ -215,6 +298,10 @@ void SystemClock_Config(void)
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
   RCC_PeriphCLKInitTypeDef PeriphClkInitStruct;
 
+    /**Macro to configure SAI1BlockB clock source selection 
+    */
+  __HAL_RCC_SAI_BLOCKBCLKSOURCE_CONFIG(SAI_CLKSOURCE_PLLSAI);
+
     /**Macro to configure SAI1BlockA clock source selection 
     */
   __HAL_RCC_SAI_BLOCKACLKSOURCE_CONFIG(SAI_CLKSOURCE_PLLI2S);
@@ -254,12 +341,15 @@ void SystemClock_Config(void)
     _Error_Handler(__FILE__, __LINE__);
   }
 
-  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_SAI_PLLI2S|RCC_PERIPHCLK_LTDC;
+  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_SAI_PLLI2S|RCC_PERIPHCLK_SAI_PLLSAI
+                              |RCC_PERIPHCLK_LTDC;
   PeriphClkInitStruct.PLLI2S.PLLI2SN = 197;
   PeriphClkInitStruct.PLLI2S.PLLI2SQ = 2;
   PeriphClkInitStruct.PLLSAI.PLLSAIN = 50;
   PeriphClkInitStruct.PLLSAI.PLLSAIR = 2;
+  PeriphClkInitStruct.PLLSAI.PLLSAIQ = 4;
   PeriphClkInitStruct.PLLI2SDivQ = 16;
+  PeriphClkInitStruct.PLLSAIDivQ = 3;
   PeriphClkInitStruct.PLLSAIDivR = RCC_PLLSAIDIVR_2;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
   {

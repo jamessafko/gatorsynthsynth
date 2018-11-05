@@ -55,7 +55,7 @@
 //
 // Define the available number of bytes available for the GUI
 //
-#define GUI_NUMBYTES  (1024) *  150   // x KByte
+#define GUI_NUMBYTES  (1024) *  120   // x KByte
 
 /*********************************************************************
 *
@@ -72,6 +72,10 @@
 *
 **********************************************************************
 */
+
+/* 32 bit aligned memory area */
+static U32 extMem[GUI_NUMBYTES / 4];
+
 /*********************************************************************
 *
 *       GUI_X_Config
@@ -82,8 +86,7 @@
 */
 void GUI_X_Config(void)
 {
-/* 32 bit aligned memory area */
-static U32 extMem[GUI_NUMBYTES / 4];
+
 
   GUI_ALLOC_AssignMemory(extMem, GUI_NUMBYTES);
 

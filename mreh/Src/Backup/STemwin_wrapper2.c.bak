@@ -45,8 +45,11 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "STemwin_wrapper2.h"
+#include "stm32f429i_discovery_ts.h"
 #include "GUI_Private.h"
 #include "ili9341.h"
+
+extern uint8_t GUI_Initialized;
 
 /** @addtogroup STEMWIN_LIBRARY
 * @{
@@ -237,6 +240,52 @@ void HAL_LTDC_LineEvenCallback(LTDC_HandleTypeDef *hltdc)
 /*******************************************************************************
                           Display configuration
 *******************************************************************************/
+void detect_touch()
+{
+	if(GUI_Initialized == 1)
+	  {
+		  GUI_PID_STATE TS_State;
+		static TS_StateTypeDef prev_state;
+		TS_StateTypeDef  ts;
+		uint16_t xDiff, yDiff;
+
+		BSP_TS_GetState(&ts);
+
+		TS_State.Pressed = ts.TouchDetected;
+
+		// Flip axis
+		uint16_t temp = ts.X;
+		ts.X = 320 - ts.Y; // flipped x and y
+		ts.Y = temp; // flipped x and y
+
+		xDiff = (prev_state.X > ts.X) ? (prev_state.X - ts.X) : (ts.X - prev_state.X);
+		yDiff = (prev_state.Y > ts.Y) ? (prev_state.Y - ts.Y) : (ts.Y - prev_state.Y);
+
+		if(ts.TouchDetected)
+		{
+		  if((prev_state.TouchDetected != ts.TouchDetected )||
+			 (xDiff > 3 )||
+			   (yDiff > 3))
+		  {
+			prev_state = ts;
+
+			TS_State.Layer = 0;
+			TS_State.x = ts.X;
+			TS_State.y = ts.Y;
+
+			GUI_TOUCH_StoreStateEx(&TS_State);
+		  }
+		}
+		if(!ts.TouchDetected && prev_state.TouchDetected != ts.TouchDetected)
+		{
+		  GUI_TOUCH_StoreStateEx(&TS_State);
+		}
+
+		//GUI_Exec();
+	  }
+	GUI_Exec();
+}
+
 /**
   * @brief  Called during the initialization process in order to set up the
   *          display driver configuration

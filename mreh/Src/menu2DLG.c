@@ -19,6 +19,7 @@
 */
 
 // USER START (Optionally insert additional includes)
+#include "menu1DLG.h"
 // USER END
 
 #include "DIALOG.h"
@@ -151,7 +152,6 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 *
 *       Createmenu2
 */
-WM_HWIN Createmenu2(void);
 WM_HWIN Createmenu2(void) {
   WM_HWIN hWin;
 

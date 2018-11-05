@@ -281,6 +281,7 @@ void detect_touch()
 		  GUI_TOUCH_StoreStateEx(&TS_State);
 		}
 
+		//GUI_Exec();
 	  }
 	GUI_Exec();
 }

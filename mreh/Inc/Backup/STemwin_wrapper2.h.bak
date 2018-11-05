@@ -67,6 +67,7 @@ void GRAPHICS_HW_Init(void);
 void GRAPHICS_Init(void);
 void GRAPHICS_IncTick(void);
 void DMA2D_Init(void);
+void detect_touch();
 #endif /* STEMWIN_WRAPPER_H */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

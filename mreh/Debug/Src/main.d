@@ -20,6 +20,8 @@ Src/main.o: ../Src/main.c \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc_ex.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_crc.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma2d.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h \
@@ -35,6 +37,8 @@ Src/main.o: ../Src/main.c \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_sai.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_sai_ex.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_sd.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_sdmmc.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
@@ -46,11 +50,23 @@ Src/main.o: ../Src/main.c \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Inc/GUIConf2.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/Global.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Inc/GUI_App2.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Inc/adc.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Inc/crc.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Inc/dma.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Inc/dma2d.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Inc/fatfs.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/Third_Party/FatFs/src/ff.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/Third_Party/FatFs/src/integer.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Inc/ffconf.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Inc/bsp_driver_sd.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/Third_Party/FatFs/src/ff_gen_drv.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/Third_Party/FatFs/src/diskio.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/Third_Party/FatFs/src/ff.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Inc/sd_diskio.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Inc/i2c.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Inc/ltdc.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Inc/sai.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Inc/sdio.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Inc/spi.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Inc/tim.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Inc/usart.h \
@@ -70,7 +86,45 @@ Src/main.o: ../Src/main.c \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/BSP/STM32F429I-Discovery/../Components/stmpe811/../Common2/io.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/BSP/STM32F429I-Discovery/stm32f429i_discovery_sdram.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/BSP/STM32F429I-Discovery/../Components/ili93412/ili9341.h \
- /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/BSP/STM32F429I-Discovery/../Components/ili93412/../Common2/lcd.h
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/BSP/STM32F429I-Discovery/../Components/ili93412/../Common2/lcd.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Inc/menu1DLG.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/DIALOG.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/WM.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/BUTTON.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/DIALOG_Intern.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/WIDGET.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/WM_Intern.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/GUI_Private.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/LCD_Protected.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/GUI_Debug.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/SCROLLBAR.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/CALENDAR.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/CHECKBOX.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/CHOOSECOLOR.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/CHOOSEFILE.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/DROPDOWN.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/LISTBOX.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/EDIT.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/FRAMEWIN.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/GRAPH.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/HEADER.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/ICONVIEW.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/IMAGE.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/LISTVIEW.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/LISTWHEEL.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/MENU.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/MULTIEDIT.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/MULTIPAGE.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/DIALOG.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/PROGBAR.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/RADIO.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/SLIDER.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/SPINBOX.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/SWIPELIST.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/TEXT.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/TREEVIEW.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/KNOB.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Inc/menu2DLG.h
 
 /Users/jamessafko/Documents/ST\ workspace/mreh/Inc/main.h:
 
@@ -114,6 +168,10 @@ Src/main.o: ../Src/main.c \
 
 /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h:
 
+/Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc_ex.h:
+
 /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_crc.h:
 
 /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma2d.h:
@@ -144,6 +202,10 @@ Src/main.o: ../Src/main.c \
 
 /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_sai_ex.h:
 
+/Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_sd.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_sdmmc.h:
+
 /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h:
 
 /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h:
@@ -166,15 +228,39 @@ Src/main.o: ../Src/main.c \
 
 /Users/jamessafko/Documents/ST\ workspace/mreh/Inc/GUI_App2.h:
 
+/Users/jamessafko/Documents/ST\ workspace/mreh/Inc/adc.h:
+
 /Users/jamessafko/Documents/ST\ workspace/mreh/Inc/crc.h:
 
+/Users/jamessafko/Documents/ST\ workspace/mreh/Inc/dma.h:
+
 /Users/jamessafko/Documents/ST\ workspace/mreh/Inc/dma2d.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Inc/fatfs.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/Third_Party/FatFs/src/ff.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/Third_Party/FatFs/src/integer.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Inc/ffconf.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Inc/bsp_driver_sd.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/Third_Party/FatFs/src/ff_gen_drv.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/Third_Party/FatFs/src/diskio.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/Third_Party/FatFs/src/ff.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Inc/sd_diskio.h:
 
 /Users/jamessafko/Documents/ST\ workspace/mreh/Inc/i2c.h:
 
 /Users/jamessafko/Documents/ST\ workspace/mreh/Inc/ltdc.h:
 
 /Users/jamessafko/Documents/ST\ workspace/mreh/Inc/sai.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Inc/sdio.h:
 
 /Users/jamessafko/Documents/ST\ workspace/mreh/Inc/spi.h:
 
@@ -215,3 +301,79 @@ Src/main.o: ../Src/main.c \
 /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/BSP/STM32F429I-Discovery/../Components/ili93412/ili9341.h:
 
 /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/BSP/STM32F429I-Discovery/../Components/ili93412/../Common2/lcd.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Inc/menu1DLG.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/DIALOG.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/WM.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/BUTTON.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/DIALOG_Intern.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/WIDGET.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/WM_Intern.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/GUI_Private.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/LCD_Protected.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/GUI_Debug.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/SCROLLBAR.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/CALENDAR.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/CHECKBOX.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/CHOOSECOLOR.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/CHOOSEFILE.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/DROPDOWN.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/LISTBOX.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/EDIT.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/FRAMEWIN.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/GRAPH.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/HEADER.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/ICONVIEW.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/IMAGE.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/LISTVIEW.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/LISTWHEEL.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/MENU.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/MULTIEDIT.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/MULTIPAGE.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/DIALOG.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/PROGBAR.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/RADIO.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/SLIDER.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/SPINBOX.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/SWIPELIST.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/TEXT.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/TREEVIEW.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Middlewares/ST2/STemWin/inc/KNOB.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Inc/menu2DLG.h:

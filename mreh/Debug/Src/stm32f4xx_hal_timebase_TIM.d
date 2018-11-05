@@ -26,6 +26,8 @@ Src/stm32f4xx_hal_timebase_TIM.o: ../Src/stm32f4xx_hal_timebase_TIM.c \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc_ex.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_crc.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma2d.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h \
@@ -41,6 +43,8 @@ Src/stm32f4xx_hal_timebase_TIM.o: ../Src/stm32f4xx_hal_timebase_TIM.c \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_sai.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_sai_ex.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_sd.h \
+ /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_sdmmc.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
  /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
@@ -100,6 +104,10 @@ Src/stm32f4xx_hal_timebase_TIM.o: ../Src/stm32f4xx_hal_timebase_TIM.c \
 
 /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h:
 
+/Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc_ex.h:
+
 /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_crc.h:
 
 /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma2d.h:
@@ -129,6 +137,10 @@ Src/stm32f4xx_hal_timebase_TIM.o: ../Src/stm32f4xx_hal_timebase_TIM.c \
 /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_sai.h:
 
 /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_sai_ex.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_sd.h:
+
+/Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_sdmmc.h:
 
 /Users/jamessafko/Documents/ST\ workspace/mreh/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h:
 

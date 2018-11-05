@@ -69,9 +69,9 @@ Purpose     : Debug macros
 
 #ifndef GUI_DEBUG_LEVEL
   #ifdef WIN32
-    #define GUI_DEBUG_LEVEL GUI_DEBUG_LEVEL_LOG_WARNINGS  /* Simulation should log all warnings */
+    #define GUI_DEBUG_LEVEL GUI_DEBUG_LEVEL_LOG_ALL  /* Simulation should log all warnings */
   #else
-    #define GUI_DEBUG_LEVEL GUI_DEBUG_LEVEL_NOCHECK       /* For most targets, min. size is important */
+    #define GUI_DEBUG_LEVEL GUI_DEBUG_LEVEL_LOG_ALL       /* For most targets, min. size is important */
   #endif
 #endif
 
