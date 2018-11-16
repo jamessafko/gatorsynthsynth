@@ -48,8 +48,7 @@ Src/adc.o: ../Src/adc.c \
  /Users/jamessafko/Documents/ST\ workspace/GatorSynth/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h \
  /Users/jamessafko/Documents/ST\ workspace/GatorSynth/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
  /Users/jamessafko/Documents/ST\ workspace/GatorSynth/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
- /Users/jamessafko/Documents/ST\ workspace/GatorSynth/Inc/gpio.h \
- /Users/jamessafko/Documents/ST\ workspace/GatorSynth/Inc/dma.h
+ /Users/jamessafko/Documents/ST\ workspace/GatorSynth/Inc/gpio.h
 
 /Users/jamessafko/Documents/ST\ workspace/GatorSynth/Inc/adc.h:
 
@@ -150,5 +149,3 @@ Src/adc.o: ../Src/adc.c \
 /Users/jamessafko/Documents/ST\ workspace/GatorSynth/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h:
 
 /Users/jamessafko/Documents/ST\ workspace/GatorSynth/Inc/gpio.h:
-
-/Users/jamessafko/Documents/ST\ workspace/GatorSynth/Inc/dma.h:

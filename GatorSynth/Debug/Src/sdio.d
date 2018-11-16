@@ -55,6 +55,7 @@ Src/sdio.o: ../Src/sdio.c \
  /Users/jamessafko/Documents/ST\ workspace/GatorSynth/Inc/bsp_driver_sd.h \
  /Users/jamessafko/Documents/ST\ workspace/GatorSynth/Inc/gpio.h \
  /Users/jamessafko/Documents/ST\ workspace/GatorSynth/Inc/dma.h \
+ /Users/jamessafko/Documents/ST\ workspace/GatorSynth/Inc/stm32f4xx_it.h \
  /Users/jamessafko/Documents/ST\ workspace/GatorSynth/Inc/fatfs.h \
  /Users/jamessafko/Documents/ST\ workspace/GatorSynth/Middlewares/Third_Party/FatFs/src/ff_gen_drv.h \
  /Users/jamessafko/Documents/ST\ workspace/GatorSynth/Middlewares/Third_Party/FatFs/src/diskio.h \
@@ -172,6 +173,8 @@ Src/sdio.o: ../Src/sdio.c \
 /Users/jamessafko/Documents/ST\ workspace/GatorSynth/Inc/gpio.h:
 
 /Users/jamessafko/Documents/ST\ workspace/GatorSynth/Inc/dma.h:
+
+/Users/jamessafko/Documents/ST\ workspace/GatorSynth/Inc/stm32f4xx_it.h:
 
 /Users/jamessafko/Documents/ST\ workspace/GatorSynth/Inc/fatfs.h:
 

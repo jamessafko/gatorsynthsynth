@@ -80,9 +80,9 @@ uint8_t GUI_Initialized = 0;
 I2C_HandleTypeDef I2cHandle;
 extern SAI_HandleTypeDef hsai_BlockA1;
 extern struct SoundFile sample;
-extern ADC_HandleTypeDef hadc1;
 extern uint32_t pitch_int;
 extern TIM_HandleTypeDef htim4;
+extern TIM_HandleTypeDef htim2;
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE END PV */
@@ -137,6 +137,7 @@ int main(void)
   MX_LTDC_Init();
   MX_FATFS_Init();
   MX_TIM4_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
   if(BSP_SD_Init() != 0)
@@ -161,6 +162,7 @@ int main(void)
 
 	// Start timer
 	HAL_TIM_Base_Start_IT(&htim4);
+	HAL_TIM_Base_Start_IT(&htim2);
 
 	// Create menu
 	Createmenu2();
@@ -169,20 +171,23 @@ int main(void)
 	volatile uint8_t ret;
 	if ((ret = gs_sd_read_write_test()) != 0)
 		_Error_Handler(__FILE__, __LINE__);
-	sd_read_wav(&sample, "SINE_16.WAV");
+	ret = sd_read_wav(&sample, "fading sine mono.wav");
 	if (ret)
 		_Error_Handler(__FILE__, __LINE__);
 
+	/*
 	HAL_Delay(1000);
 
 	if ((ret = gs_sd_read_write_test()) != 0)
 		_Error_Handler(__FILE__, __LINE__);
-	ret = sd_read_wav(&sample, "SINE_16.WAV");
+	ret = sd_read_wav(&sample, "fading sine.wav");
 	if (ret)
 		_Error_Handler(__FILE__, __LINE__);
+		*/
 
 	//Start ADC
-	HAL_ADC_Start_DMA(&hadc1, &pitch_int, 1);
+	//HAL_ADC_Start_DMA(&hadc1, &pitch_int, 1);
+	HAL_ADC_Start_IT(&hadc1);
 
 	start_audio();
 
@@ -222,11 +227,11 @@ void SystemClock_Config(void)
 
     /**Macro to configure SAI1BlockB clock source selection 
     */
-  __HAL_RCC_SAI_BLOCKBCLKSOURCE_CONFIG(SAI_CLKSOURCE_PLLI2S);
+  __HAL_RCC_SAI_BLOCKBCLKSOURCE_CONFIG(SAI_CLKSOURCE_PLLSAI);
 
     /**Macro to configure SAI1BlockA clock source selection 
     */
-  __HAL_RCC_SAI_BLOCKACLKSOURCE_CONFIG(SAI_CLKSOURCE_PLLI2S);
+  __HAL_RCC_SAI_BLOCKACLKSOURCE_CONFIG(SAI_CLKSOURCE_PLLSAI);
 
     /**Configure the main internal regulator output voltage 
     */
@@ -270,13 +275,12 @@ void SystemClock_Config(void)
     _Error_Handler(__FILE__, __LINE__);
   }
 
-  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_SAI_PLLI2S|RCC_PERIPHCLK_LTDC;
-  PeriphClkInitStruct.PLLI2S.PLLI2SN = 203;
-  PeriphClkInitStruct.PLLI2S.PLLI2SQ = 4;
-  PeriphClkInitStruct.PLLSAI.PLLSAIN = 50;
-  PeriphClkInitStruct.PLLSAI.PLLSAIR = 2;
-  PeriphClkInitStruct.PLLI2SDivQ = 9;
-  PeriphClkInitStruct.PLLSAIDivR = RCC_PLLSAIDIVR_2;
+  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_SAI_PLLSAI|RCC_PERIPHCLK_LTDC;
+  PeriphClkInitStruct.PLLSAI.PLLSAIN = 172;
+  PeriphClkInitStruct.PLLSAI.PLLSAIR = 4;
+  PeriphClkInitStruct.PLLSAI.PLLSAIQ = 4;
+  PeriphClkInitStruct.PLLSAIDivQ = 7;
+  PeriphClkInitStruct.PLLSAIDivR = RCC_PLLSAIDIVR_4;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
   {
     _Error_Handler(__FILE__, __LINE__);

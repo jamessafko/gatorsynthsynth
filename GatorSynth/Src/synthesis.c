@@ -11,7 +11,7 @@
 
 #define BUFFER_SIZE 256
 
-int16_t wav_buff[44100 * 5] __attribute__((__section__(".sdram")));
+int16_t wav_buff[48000 * 15] __attribute__((__section__(".sdram")));
 int16_t out_buff_1[BUFFER_SIZE] =
 { 0 };
 int16_t out_buff_2[BUFFER_SIZE] =
@@ -175,7 +175,7 @@ void process_block()
 	{
 		// Turn off LCD while processing
 		HAL_TIM_Base_Stop_IT(&htim4);
-		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_5, GPIO_PIN_SET);
+		//HAL_GPIO_WritePin(GPIOD, GPIO_PIN_5, GPIO_PIN_SET);
 
 		for(out_index = 0; out_index < BUFFER_SIZE; out_index++)
 		{
@@ -185,13 +185,13 @@ void process_block()
 			sample.currentSample += pitch_factor;
 
 			// Past end point
-			if((uint32_t)(sample.currentSample) > sample.endSample)
-				sample.currentSample -= (float)(sample.endSample - sample.startSample + 1);
+			if((uint32_t)(sample.currentSample) > (sample.loopLength + sample.startSample - 1))
+				sample.currentSample -= (float)(sample.loopLength);
 			if((uint32_t)(sample.currentSample) < sample.startSample)
 				sample.currentSample = sample.startSample;
 		}
 
-		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_5, GPIO_PIN_RESET);
+		//HAL_GPIO_WritePin(GPIOD, GPIO_PIN_5, GPIO_PIN_RESET);
 		// Turn off LCD while processing
 		HAL_TIM_Base_Start_IT(&htim4);
 		processing_complete = 1;
