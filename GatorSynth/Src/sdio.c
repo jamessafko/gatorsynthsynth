@@ -54,11 +54,14 @@
 #include "dma.h"
 
 /* USER CODE BEGIN 0 */
+#include "stm32f4xx_it.h"
 #include "fatfs.h"
 #include "ff.h"
 #include <string.h>
-extern int16_t wav_buff[44100 * 5];
+extern int16_t wav_buff[48000 * 15];
 extern Disk_drvTypeDef disk;
+extern int enc_cnt_end;
+extern int enc_cnt_start;
 /* USER CODE END 0 */
 
 SD_HandleTypeDef hsd;
@@ -315,9 +318,10 @@ int sd_read_wav(struct SoundFile *sound, char name[])
 				chunk[3] == 0x00))
 			return 8;
 		sound->numChannels = (chunk[3] << 8) | chunk[2];
-		if (!(chunk[4] == 0x80 && //SampleRate == 44.1kHz???***************
-				chunk[5] == 0xBB && chunk[6] == 0x00 && chunk[7] == 0x00))
-			return 9;
+		// Skip sample rate verification
+		//if (!(chunk[4] == 0x80 && //SampleRate == 44.1kHz???***************
+				//chunk[5] == 0xBB && chunk[6] == 0x00 && chunk[7] == 0x00))
+			//return 9;
 		sound->sampleRate = (chunk[7] << 24) | (chunk[6] << 16) | (chunk[5] << 8)
 				| chunk[4];
 		if (!(chunk[14] == 16 && //bit depth == 16 bits???***************
@@ -343,7 +347,10 @@ int sd_read_wav(struct SoundFile *sound, char name[])
 		sound->data = wav_buff;
 		sound->currentSample = 0;
 		sound->startSample = 0;
-		sound->endSample = sound->numSamples - 1;
+		sound->loopLength = sound->numSamples - 1;
+
+		enc_cnt_end = sound->loopLength;
+		enc_cnt_start = 0;
 
 		if (f_close(&myFile) != FR_OK)
 			return 13;

@@ -89,8 +89,8 @@ static void win1Callback(WM_MESSAGE * pMsg)
 				break;
 			case WM_NOTIFICATION_VALUE_CHANGED:
 				readValue = (uint32_t) SLIDER_GetValue(sliderItem1);
-				if(readValue > sample.startSample)
-					sample.endSample = readValue;
+				//if(readValue > sample.startSample)
+					//sample.endSample = readValue;
 				break;
 			}
 			break;
@@ -102,8 +102,8 @@ static void win1Callback(WM_MESSAGE * pMsg)
 				break;
 			case WM_NOTIFICATION_VALUE_CHANGED:
 				readValue = (uint32_t) SLIDER_GetValue(sliderItem2);
-				if(readValue < sample.endSample)
-					sample.startSample = readValue;
+				//if(readValue < sample.endSample)
+					//sample.startSample = readValue;
 				break;
 			}
 			break;

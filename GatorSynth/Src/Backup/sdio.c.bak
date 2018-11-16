@@ -301,7 +301,7 @@ int sd_read_wav(struct SoundFile *sound, char name[])
 		if (check != FR_OK)
 			return 5;
 		if (!(chunk[0] == 0x10 && //Subchunk1Size == 16 == PCM???
-				chunk[1] == 0x00 && chunk[2] == 0x00 && chunk[2] == 0x00))
+				chunk[1] == 0x00 && chunk[2] == 0x00 && chunk[3] == 0x00))
 			return 6;
 
 		// Parse file information
@@ -315,9 +315,10 @@ int sd_read_wav(struct SoundFile *sound, char name[])
 				chunk[3] == 0x00))
 			return 8;
 		sound->numChannels = (chunk[3] << 8) | chunk[2];
-		if (!(chunk[4] == 0x80 && //SampleRate == 44.1kHz???***************
-				chunk[5] == 0xBB && chunk[6] == 0x00 && chunk[7] == 0x00))
-			return 9;
+		// Skip sample rate verification
+		//if (!(chunk[4] == 0x80 && //SampleRate == 44.1kHz???***************
+				//chunk[5] == 0xBB && chunk[6] == 0x00 && chunk[7] == 0x00))
+			//return 9;
 		sound->sampleRate = (chunk[7] << 24) | (chunk[6] << 16) | (chunk[5] << 8)
 				| chunk[4];
 		if (!(chunk[14] == 16 && //bit depth == 16 bits???***************

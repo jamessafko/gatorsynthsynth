@@ -14,7 +14,7 @@
 // used to describe a sound file
 struct SoundFile{
 	uint32_t startSample;
-	uint32_t endSample;
+	uint32_t loopLength;
 	float currentSample;
 	uint32_t numSamples;
 	uint16_t numChannels;

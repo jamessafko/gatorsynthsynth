@@ -76,6 +76,9 @@
 #define G4_GPIO_Port GPIOB
 #define G5_Pin GPIO_PIN_11
 #define G5_GPIO_Port GPIOB
+#define StartB_Pin GPIO_PIN_2
+#define StartB_GPIO_Port GPIOG
+#define StartB_EXTI_IRQn EXTI2_IRQn
 #define R7_Pin GPIO_PIN_6
 #define R7_GPIO_Port GPIOG
 #define DOTCLK_Pin GPIO_PIN_7
@@ -88,8 +91,17 @@
 #define R4_GPIO_Port GPIOA
 #define R5_Pin GPIO_PIN_12
 #define R5_GPIO_Port GPIOA
+#define StartA_Pin GPIO_PIN_11
+#define StartA_GPIO_Port GPIOC
+#define StartA_EXTI_IRQn EXTI15_10_IRQn
 #define G7_Pin GPIO_PIN_3
 #define G7_GPIO_Port GPIOD
+#define EndA_Pin GPIO_PIN_4
+#define EndA_GPIO_Port GPIOD
+#define EndA_EXTI_IRQn EXTI4_IRQn
+#define EndB_Pin GPIO_PIN_5
+#define EndB_GPIO_Port GPIOD
+#define EndB_EXTI_IRQn EXTI9_5_IRQn
 #define G3_Pin GPIO_PIN_10
 #define G3_GPIO_Port GPIOG
 #define B3_Pin GPIO_PIN_11

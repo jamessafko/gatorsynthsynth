@@ -58,7 +58,8 @@ Src/stm32f4xx_it.o: ../Src/stm32f4xx_it.c \
  /Users/jamessafko/Documents/ST\ workspace/GatorSynth/Drivers/BSP/STM32F429I-Discovery/stm32f429i_discovery.h \
  /Users/jamessafko/Documents/ST\ workspace/GatorSynth/Drivers/BSP/STM32F429I-Discovery/../Components/stmpe811/stmpe811.h \
  /Users/jamessafko/Documents/ST\ workspace/GatorSynth/Drivers/BSP/STM32F429I-Discovery/../Components/stmpe811/../Common2/ts.h \
- /Users/jamessafko/Documents/ST\ workspace/GatorSynth/Drivers/BSP/STM32F429I-Discovery/../Components/stmpe811/../Common2/io.h
+ /Users/jamessafko/Documents/ST\ workspace/GatorSynth/Drivers/BSP/STM32F429I-Discovery/../Components/stmpe811/../Common2/io.h \
+ /Users/jamessafko/Documents/ST\ workspace/GatorSynth/Inc/synthesis.h
 
 /Users/jamessafko/Documents/ST\ workspace/GatorSynth/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 
@@ -179,3 +180,5 @@ Src/stm32f4xx_it.o: ../Src/stm32f4xx_it.c \
 /Users/jamessafko/Documents/ST\ workspace/GatorSynth/Drivers/BSP/STM32F429I-Discovery/../Components/stmpe811/../Common2/ts.h:
 
 /Users/jamessafko/Documents/ST\ workspace/GatorSynth/Drivers/BSP/STM32F429I-Discovery/../Components/stmpe811/../Common2/io.h:
+
+/Users/jamessafko/Documents/ST\ workspace/GatorSynth/Inc/synthesis.h:

@@ -175,7 +175,7 @@ void process_block()
 	{
 		// Turn off LCD while processing
 		HAL_TIM_Base_Stop_IT(&htim4);
-		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_5, GPIO_PIN_SET);
+		//HAL_GPIO_WritePin(GPIOD, GPIO_PIN_5, GPIO_PIN_SET);
 
 		for(out_index = 0; out_index < BUFFER_SIZE; out_index++)
 		{
@@ -191,7 +191,7 @@ void process_block()
 				sample.currentSample = sample.startSample;
 		}
 
-		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_5, GPIO_PIN_RESET);
+		//HAL_GPIO_WritePin(GPIOD, GPIO_PIN_5, GPIO_PIN_RESET);
 		// Turn off LCD while processing
 		HAL_TIM_Base_Start_IT(&htim4);
 		processing_complete = 1;

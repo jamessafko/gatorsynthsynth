@@ -17,10 +17,10 @@
   *      may be used to endorse or promote products derived from this software
   *      without specific prior written permission.
   *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT Hold_endERS AND CONTRIBUTORS "AS IS"
   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT Hold_endER OR CONTRIBUTORS BE LIABLE
   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
   * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
@@ -40,15 +40,33 @@
 #include "stm32f429i_discovery.h"
 #include "stm32f429i_discovery_ts.h"
 #include "stm32f4xx_hal_i2c.h"
+#include "synthesis.h"
+extern uint32_t pitch_int;
+extern ADC_HandleTypeDef hadc1;
+
+int enc_cnt_end;
+uint8_t old_end;
+uint8_t middle_end;
+uint8_t new_end;
+
+int enc_cnt_start;
+uint8_t old_start;
+uint8_t middle_start;
+uint8_t new_start;
+
+extern struct SoundFile sample;
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
-extern DMA_HandleTypeDef hdma_adc1;
+extern ADC_HandleTypeDef hadc1;
 extern I2C_HandleTypeDef hi2c3;
 extern DMA_HandleTypeDef hdma_sai1_a;
+extern SAI_HandleTypeDef hsai_BlockA1;
+extern SAI_HandleTypeDef hsai_BlockB1;
 extern DMA_HandleTypeDef hdma_sdio_rx;
 extern DMA_HandleTypeDef hdma_sdio_tx;
 extern SD_HandleTypeDef hsd;
+extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim4;
 extern TIM_HandleTypeDef htim7;
 
@@ -191,17 +209,186 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
+* @brief This function handles EXTI line2 interrupt.
+*/
+void EXTI2_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI2_IRQn 0 */
+	GPIO_PinState tmp11=HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_11);
+	GPIO_PinState tmp2=HAL_GPIO_ReadPin(GPIOG,GPIO_PIN_2);
+
+
+  /* USER CODE END EXTI2_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_2);
+  /* USER CODE BEGIN EXTI2_IRQn 1 */
+
+  new_start = (tmp11<<1) | tmp2;
+	if((old_start==3) && (middle_start==2) && (new_start==0)) enc_cnt_start+=4;
+	if((old_start==3) && (middle_start==1) && (new_start==0)) enc_cnt_start-=4;
+	old_start = middle_start;
+	middle_start = new_start;
+
+	// Test edge cases of Encoder
+	if (enc_cnt_start < 0)
+		enc_cnt_start = 0;
+	if (enc_cnt_start >= (sample.startSample + sample.loopLength - 1))
+		enc_cnt_start = sample.startSample + sample.loopLength - 2;
+	if(enc_cnt_start >= sample.numSamples)
+		enc_cnt_start = sample.numSamples - 2;
+	// Don't move the start position if length is crazy long
+	if((sample.numSamples - enc_cnt_start) < sample.loopLength)
+		enc_cnt_start = sample.startSample;
+
+	sample.startSample = enc_cnt_start;
+
+  /* USER CODE END EXTI2_IRQn 1 */
+}
+
+/**
+* @brief This function handles EXTI line4 interrupt.
+*/
+void EXTI4_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI4_IRQn 0 */
+	GPIO_PinState tmp4=HAL_GPIO_ReadPin(GPIOD,GPIO_PIN_4);
+	GPIO_PinState tmp5=HAL_GPIO_ReadPin(GPIOD,GPIO_PIN_5);
+
+  /* USER CODE END EXTI4_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_4);
+  /* USER CODE BEGIN EXTI4_IRQn 1 */
+
+  new_end = (tmp4<<1) | tmp5;
+	if((old_end==3) && (middle_end==2) && (new_end==0)) enc_cnt_end-=4;
+	if((old_end==3) && (middle_end==1) && (new_end==0)) enc_cnt_end+=4;
+	old_end = middle_end;
+	middle_end = new_end;
+
+	// Test edge cases of Encoder
+	if (enc_cnt_end < 1)
+		enc_cnt_end = 1;
+	if (enc_cnt_end < (sample.startSample + 1))
+		enc_cnt_end = sample.startSample + 1;
+	if(enc_cnt_end >= sample.numSamples)
+		enc_cnt_end = sample.numSamples - 1;
+
+	sample.loopLength = enc_cnt_end - sample.startSample + 1;
+
+  /* USER CODE END EXTI4_IRQn 1 */
+}
+
+/**
+* @brief This function handles ADC1, ADC2 and ADC3 global interrupts.
+*/
+void ADC_IRQHandler(void)
+{
+  /* USER CODE BEGIN ADC_IRQn 0 */
+
+  /* USER CODE END ADC_IRQn 0 */
+  HAL_ADC_IRQHandler(&hadc1);
+  /* USER CODE BEGIN ADC_IRQn 1 */
+
+  /* USER CODE END ADC_IRQn 1 */
+}
+
+/**
+* @brief This function handles EXTI line[9:5] interrupts.
+*/
+void EXTI9_5_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI9_5_IRQn 0 */
+	GPIO_PinState tmp4=HAL_GPIO_ReadPin(GPIOD,GPIO_PIN_4);
+	GPIO_PinState tmp5=HAL_GPIO_ReadPin(GPIOD,GPIO_PIN_5);
+
+  /* USER CODE END EXTI9_5_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_5);
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_7);
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_9);
+  /* USER CODE BEGIN EXTI9_5_IRQn 1 */
+
+  new_end = (tmp4<<1) | tmp5;
+	if((old_end==3) && (middle_end==2) && (new_end==0)) enc_cnt_end-=4;
+	if((old_end==3) && (middle_end==1) && (new_end==0)) enc_cnt_end+=4;
+	old_end = middle_end;
+	middle_end = new_end;
+
+	// Test edge cases of Encoder
+	if (enc_cnt_end < 1)
+		enc_cnt_end = 1;
+	if (enc_cnt_end < (sample.startSample + 1))
+		enc_cnt_end = sample.startSample + 1;
+	if(enc_cnt_end >= sample.numSamples)
+		enc_cnt_end = sample.numSamples - 1;
+
+	sample.loopLength = enc_cnt_end - sample.startSample + 1;
+
+  /* USER CODE END EXTI9_5_IRQn 1 */
+}
+
+/**
+* @brief This function handles TIM2 global interrupt.
+*/
+void TIM2_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM2_IRQn 0 */
+
+  /* USER CODE END TIM2_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim2);
+  /* USER CODE BEGIN TIM2_IRQn 1 */
+
+  /* USER CODE END TIM2_IRQn 1 */
+}
+
+/**
 * @brief This function handles TIM4 global interrupt.
 */
 void TIM4_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM4_IRQn 0 */
 	detect_touch();
+	//HAL_ADC_Start_IT(&hadc1);
   /* USER CODE END TIM4_IRQn 0 */
   HAL_TIM_IRQHandler(&htim4);
   /* USER CODE BEGIN TIM4_IRQn 1 */
 
   /* USER CODE END TIM4_IRQn 1 */
+}
+
+/**
+* @brief This function handles EXTI line[15:10] interrupts.
+*/
+void EXTI15_10_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI15_10_IRQn 0 */
+	GPIO_PinState tmp11=HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_11);
+	GPIO_PinState tmp2=HAL_GPIO_ReadPin(GPIOG,GPIO_PIN_2);
+
+  /* USER CODE END EXTI15_10_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_11);
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_13);
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_15);
+  /* USER CODE BEGIN EXTI15_10_IRQn 1 */
+
+  new_start = (tmp11<<1) | tmp2;
+	if((old_start==3) && (middle_start==2) && (new_start==0)) enc_cnt_start+=4;
+	if((old_start==3) && (middle_start==1) && (new_start==0)) enc_cnt_start-=4;
+	old_start = middle_start;
+	middle_start = new_start;
+
+	// Test edge cases of Encoder
+	if (enc_cnt_start < 0)
+		enc_cnt_start = 0;
+	if (enc_cnt_start >= (sample.startSample + sample.loopLength - 1))
+		enc_cnt_start = sample.startSample + sample.loopLength - 2;
+	if(enc_cnt_start >= sample.numSamples)
+		enc_cnt_start = sample.numSamples - 2;
+
+	// Don't move the start position if length is crazy long
+	if((sample.numSamples - enc_cnt_start) < sample.loopLength)
+		enc_cnt_start = sample.startSample;
+
+	sample.startSample = enc_cnt_start;
+
+  /* USER CODE END EXTI15_10_IRQn 1 */
 }
 
 /**
@@ -243,20 +430,6 @@ void TIM7_IRQHandler(void)
   HAL_TIM_IRQHandler(&htim7);
   /* USER CODE BEGIN TIM7_IRQn 1 */
   /* USER CODE END TIM7_IRQn 1 */
-}
-
-/**
-* @brief This function handles DMA2 stream0 global interrupt.
-*/
-void DMA2_Stream0_IRQHandler(void)
-{
-  /* USER CODE BEGIN DMA2_Stream0_IRQn 0 */
-
-  /* USER CODE END DMA2_Stream0_IRQn 0 */
-  HAL_DMA_IRQHandler(&hdma_adc1);
-  /* USER CODE BEGIN DMA2_Stream0_IRQn 1 */
-
-  /* USER CODE END DMA2_Stream0_IRQn 1 */
 }
 
 /**
@@ -335,7 +508,41 @@ void I2C3_ER_IRQHandler(void)
   /* USER CODE END I2C3_ER_IRQn 1 */
 }
 
-/* USER CODE BEGIN 1 */
+/**
+* @brief This function handles SAI1 global interrupt.
+*/
+void SAI1_IRQHandler(void)
+{
+  /* USER CODE BEGIN SAI1_IRQn 0 */
 
+  /* USER CODE END SAI1_IRQn 0 */
+  HAL_SAI_IRQHandler(&hsai_BlockA1);
+  HAL_SAI_IRQHandler(&hsai_BlockB1);
+  /* USER CODE BEGIN SAI1_IRQn 1 */
+
+  /* USER CODE END SAI1_IRQn 1 */
+}
+
+/* USER CODE BEGIN 1 */
+#define AVERAGE_LENGTH 100
+uint32_t adc_values[AVERAGE_LENGTH] = {0};
+uint8_t adc_index = 0;
+uint32_t adc_sum = 0;
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
+{
+	adc_values[adc_index] = HAL_ADC_GetValue(hadc);
+
+	adc_sum = 0;
+	for(int i = 0; i < AVERAGE_LENGTH; i++)
+	{
+		adc_sum += adc_values[i];
+	}
+
+	 pitch_int = adc_sum / AVERAGE_LENGTH;
+	 adc_index++;
+	 if(adc_index >= AVERAGE_LENGTH)
+		 adc_index = 0;
+	 HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_5);
+}
 /* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
